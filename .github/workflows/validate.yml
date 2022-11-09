@@ -1,21 +1,32 @@
-name: startMagent2DevEC2# Controls when the action will run. 
-# This code is set up only to run when you click action in the repository, If you require to run on a push or cron edit below
+name: Run commands on different operating systems
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  # push:
-  #  branches: [ main ]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:# The type of runner that the job will run on
-    runs-on: ubuntu-latest# Below this are each of the steps that are run
-    steps:# Name of step
-      - name: Start AWS EC2
-        # Run AWS Command on the GitHub Hosted runner which starts the instance using AWS authentication stored in GitHub Secrets (see below how to add)
+  Run-npm-on-Ubuntu:
+    name: Run npm on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm help
+
+  Run-PSScriptAnalyzer-on-Windows:
+    name: Run PSScriptAnalyzer on Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install PSScriptAnalyzer module
+        shell: pwsh
         run: |
-          aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -ErrorAction Stop
+      - name: Get list of rules
+        shell: pwsh
+        run: |
+          Get-ScriptAnalyzerRule
