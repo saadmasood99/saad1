@@ -9,11 +9,11 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:# The type of runner that the job will run on
-    runs-on: ubuntu-latest# Below this are each of the steps that are run
+    runs-on:ubuntu-latest# Below this are each of the steps that are run
     steps:# Name of step
-      - name: Start AWS EC2
+      - name:Start AWS EC2
         # Run AWS Command on the GitHub Hosted runner which starts the instance using AWS authentication stored in GitHub Secrets (see below how to add)
-        run: |
+        run:|
           aws ec2 start-instances --instance-ids ${{secrets.AWS_EC2_INSTANCE_ID }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
