@@ -1,4 +1,4 @@
-name: startMagent2DevEC2
+name: startMagent2DevEC2# Controls when the action will run. 
 # This code is set up only to run when you click action in the repository, If you require to run on a push or cron edit below
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
